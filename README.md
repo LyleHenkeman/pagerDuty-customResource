@@ -1,8 +1,8 @@
-#Pager Duty Custom Resource
+# Pager Duty Custom Resource
 
 AWS Cloudformation Custom Resource to create ah p[agerDuty Service with an own integration directly out of cloudformation.
 
-##Parameters
+## Parameters
 
 **servicesName**: Name of the pagerduty service created *mandatory*
 **pagerDutyToken**: Your actual pagerduty token *mandatory*
