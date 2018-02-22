@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create pagerduty integration
+#https://blogs.aws.amazon.com/application-management/post/Tx3DV2UYG9SC38G/Using-the-New-CloudFormation-Parameter-Types
+Parameters:
+  servicesName:
+    Description: name of pagerduty service to be created
+    Type: String
+  escalationPolicyId:
+    Description: id of the escalation policy for the service
+    Type: String
+  serviceUrgency:
+    Default: high
+    Description: urgency of the escalation policy for the service
+    Type: String
+  pagerDutyToken:
+    Description: token to create service
+    Type: String
+  description:
+    Default: changeMe
+    Description: additional information for the service
+    Type: String
+Resources:
+  pagerDutyResource:
+   Type: Custom::pagerDutyResource
+   Properties:
+      ServiceToken: yourLambdaArnExport
+      ServicesName: !Ref servicesName
+      EscalationPolicyId: !Ref escalationPolicyId
+      ServiceUrgency: !Ref serviceUrgency
+      PagerDutyToken: !Ref pagerDutyToken
+      Description: !Ref description
