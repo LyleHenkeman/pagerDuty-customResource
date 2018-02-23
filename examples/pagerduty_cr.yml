@@ -16,14 +16,14 @@ Parameters:
     Description: token to create service
     Type: String
   description:
-    Default: changeMe
+    Default: ChangeMe
     Description: additional information for the service
     Type: String
 Resources:
   pagerDutyResource:
    Type: Custom::pagerDutyResource
    Properties:
-      ServiceToken: yourLambdaArnExport
+      ServiceToken: !ImportValue pager-duty-cr-PagerDutyCR-Arn
       ServicesName: !Ref servicesName
       EscalationPolicyId: !Ref escalationPolicyId
       ServiceUrgency: !Ref serviceUrgency
