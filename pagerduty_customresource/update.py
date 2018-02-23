@@ -3,7 +3,7 @@ import json
 
 def update_pager_duty(event):
     properties = event['ResourceProperties']
-    update_service(event['PhysicalResourceId'])
+    update_service(event['PhysicalResourceId'], properties)
 
     output = {'StackId': event['StackId'], 'RequestId': event['RequestId'],
               'LogicalResourceId': event['LogicalResourceId'], 'PhysicalResourceId': event['PhysicalResourceId'],
@@ -12,7 +12,7 @@ def update_pager_duty(event):
     requests.put(event['ResponseURL'], data=json.dumps(output))
 
 
-def update_service(id):
+def update_service(id, properties):
     url = 'https://api.pagerduty.com/services/{id}'.format(id=id)
     headers = {
         'Accept': 'application/vnd.pagerduty+json;version=2',
@@ -22,12 +22,12 @@ def update_service(id):
     service_payload = {
         'service': {
             'name': properties['ServicesName'],
-            'description': properties['ServiceDescription'],
+            'description': properties['Description'],
             'escalation_policy': {
                 'id': properties['EscalationPolicyId'],
                 'type': 'escalation_policy'
             },
-            'type': service,
+            'type': 'service',
             'auto_resolve_timeout': 14400,
             'acknowledgement_timeout': 1800,
                     "incident_urgency_rule": {
@@ -37,4 +37,4 @@ def update_service(id):
         }
     }
 
-    r = requests.put(url, headers=headers, data=json.dumps(payload))
+    r = requests.put(url, headers=headers, data=json.dumps(service_payload))
