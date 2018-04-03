@@ -29,3 +29,8 @@ Resources:
       ServiceUrgency: !Ref serviceUrgency
       PagerDutyToken: !Ref pagerDutyToken
       Description: !Ref description
+
+Outputs:
+  webhook:
+    Description: Arn of the custom Resource Lambda for pager duty
+    Value: !GetAtt pagerDutyResource.Webhook

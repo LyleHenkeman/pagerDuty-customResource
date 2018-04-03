@@ -16,13 +16,14 @@ def create_pager_duty(event):
         'StackId': event['StackId'],
         'RequestId': event['RequestId'],
         'LogicalResourceId': event['LogicalResourceId'],
-        'PhysicalResourceId': 'failed'
+        'PhysicalResourceId': 'failed',
     }
     output['Status'] = 'FAILED'
 
     #create integration only if create service was successfull
     if (service_id):
-        create_integration(service_id, headers)
+        integration_webhook = create_integration(service_id, headers)
+        output['Data'] = {'Webhook': 'https://events.pagerduty.com/integration/{}/enqueue'.format(integration_webhook)}
         output['Status'] = 'SUCCESS'
         output['PhysicalResourceId'] = service_id 
 
@@ -83,4 +84,5 @@ def create_integration(service_id ,headers):
     }
 
     r = requests.post(integration_url, data=json.dumps(integration_payload), headers=headers)
-    integration_id = json.loads(r.text)['integration']['id']
+    #integration_id = json.loads(r.text)['integration']['id']
+    return json.loads(r.text)['integration']['integration_key']
