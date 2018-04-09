@@ -22,7 +22,7 @@ def create_pager_duty(event):
 
     #create integration only if create service was successfull
     if (service_id):
-        integration_webhook = create_integration(service_id, headers)
+        integration_webhook = create_integration(service_id, headers, properties)
         output['Data'] = {'Webhook': 'https://events.pagerduty.com/integration/{}/enqueue'.format(integration_webhook)}
         output['Status'] = 'SUCCESS'
         output['PhysicalResourceId'] = service_id 
@@ -64,11 +64,12 @@ def create_service(properties, headers):
     try:
         service_id = json.loads(r.text)['service']['id']
     except:
+        print(service)
         return None
 
     return service_id
 
-def create_integration(service_id ,headers):
+def create_integration(service_id ,headers, properties):
 
     integration_url = 'https://api.pagerduty.com/services/{id}/integrations'.format(id=service_id)
 
@@ -76,6 +77,10 @@ def create_integration(service_id ,headers):
         'integration': {
             'type': 'generic_events_api_inbound_integration',
             'name': "Generic API Integration",
+            'vendor': {
+                "id": properties['VendorId'],
+                 "type": "vendor_reference"
+                 },
             "service": {
                 "id": service_id,
                 "type": "service"

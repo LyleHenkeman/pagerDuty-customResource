@@ -19,16 +19,20 @@ Parameters:
     Default: ChangeMe
     Description: additional information for the service
     Type: String
+  vendorId:
+    Description: vendorId for the integration
+    Type: String
 Resources:
   pagerDutyResource:
    Type: Custom::pagerDutyResource
    Properties:
-      ServiceToken: !ImportValue pager-duty-cr-PagerDutyCR-Arn
+      ServiceToken: !ImportValue up-pager-duty-cr-PagerDutyCR-Arn
       ServicesName: !Ref servicesName
       EscalationPolicyId: !Ref escalationPolicyId
       ServiceUrgency: !Ref serviceUrgency
       PagerDutyToken: !Ref pagerDutyToken
       Description: !Ref description
+      VendorId: !Ref vendorId
 
 Outputs:
   webhook:
